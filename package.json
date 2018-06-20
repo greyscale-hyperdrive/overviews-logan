@@ -1,0 +1,19 @@
+{
+  "name": "overviews-logan",
+  "version": "1.0.0",
+  "description": "SDC project hrsf95",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/greyscale-hyperdrive/overviews-logan.git"
+  },
+  "author": "Logan Hart",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/greyscale-hyperdrive/overviews-logan/issues"
+  },
+  "homepage": "https://github.com/greyscale-hyperdrive/overviews-logan#readme"
+}
