@@ -46,7 +46,7 @@ router.patch('/:restaurantId/overview', (req, res, next) => {
 });
 
 //Delete: 200(ok), 404(not found)
-//for entire collection 405(method not allowed) -> would update entire collection
+//for entire collection 405(method not allowed)
 router.delete('/:restaurantId/overview', (req, res, next) => {
   res.status(200).json({
     message: `Deleted overview ${restaurantId}`
