@@ -1,0 +1,24 @@
+.infoSection {
+  margin-bottom: 10px;
+}
+
+.infoTitle {
+  font-weight: 700;
+  position: relative;
+  bottom: 4px;
+  margin-left: 8px;
+}
+
+.infoContent {
+  margin-left: 28px;
+  position: relative;
+  bottom: 4px;
+}
+
+.websiteInfo {
+  color: #CA4548;
+}
+
+.belowMap {
+  margin-top: 210px;
+}

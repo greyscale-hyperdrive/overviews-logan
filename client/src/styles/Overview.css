@@ -1,0 +1,34 @@
+.overviewMod {
+  margin-bottom: 100px;
+}
+
+.card-body {
+  padding: 10px;
+}
+
+.overviewTitle {
+  font-weight: 700;
+  border-bottom: 1px solid #EBEBEB; 
+  padding: 25px 0px 25px 0px;
+}
+
+.displayAllBtn {
+  border: solid 1px #EBEBEB;
+  padding: 10px;
+  margin: auto;
+  width: 250px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.displayAllBtn:hover {
+  border: solid 2px #CA4548;
+  padding: 9px;
+}
+
+.fade {
+  background: linear-gradient(to bottom, rgba(225, 255, 255, 0), rgba(255, 255, 255, 1));
+  height: 150px;
+  margin-top: -150px;
+  position: relative;
+}
