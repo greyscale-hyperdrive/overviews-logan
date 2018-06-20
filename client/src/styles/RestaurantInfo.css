@@ -1,0 +1,15 @@
+.restaurantInfo {
+  padding: 0px;
+  font-size: 0.85rem;
+  position: relative;
+}
+
+.hidden {
+  height: 250px;
+  overflow: hidden;
+}
+
+.map {
+  width: 200px;
+  height: 200px;
+}

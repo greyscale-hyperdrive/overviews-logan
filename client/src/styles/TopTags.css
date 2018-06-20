@@ -1,0 +1,18 @@
+.topTagsContainer {
+  margin-bottom: 30px;
+}
+
+.tagSectionHeader {
+  margin-bottom: 5px;
+}
+
+.tagScrollWrapper {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+
+::-webkit-scrollbar { 
+    display: none; 
+}
+

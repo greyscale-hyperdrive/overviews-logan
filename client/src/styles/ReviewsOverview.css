@@ -1,0 +1,9 @@
+.avgReviewContainer, .totalReviewsContainer, .priceRangeContainer, .cuisineTypeContainer {
+  margin-right: 3%;
+  display: inline-block;
+}
+
+.avgReview, .totalReviews, .priceRange, .cuisineType {
+  margin-left: 5px;
+  font-weight: 700;
+}
