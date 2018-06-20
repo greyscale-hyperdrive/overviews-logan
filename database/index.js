@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const overviewData = require('./data.js');
 
 const mongoURL = process.env.mongoURL || 'mongodb://localhost/cavatable_overviews';
 
@@ -34,6 +35,11 @@ const overviewSchema = new mongoose.Schema({
 });
 
 const OverviewModel = mongoose.model('overviews', overviewSchema);
+
+// OverviewModel.remove({})
+//   .then(() => OverviewModel.insertMany(overviewData))
+//   .then(() => console.log('Successfully stored data in database'))
+//   .catch(err => console.log(err));
 
 const retrieve = (restaurantId, handleResponse) => {
   OverviewModel.find({ rest_id: parseInt(restaurantId, 10) })

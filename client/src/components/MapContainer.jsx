@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import api_key from '../../../googleMaps.config';
+import api_key from '../../../config/googleMaps.js';
 import { GoogleApiWrapper, Map, Marker } from 'google-maps-react';
 
 const MapContainer = props => {
@@ -20,5 +20,5 @@ MapContainer.propTypes = {
 };
 
 export default GoogleApiWrapper({
-  apiKey: api_key,
+  apiKey: api_key.config,
 })(MapContainer);
