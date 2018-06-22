@@ -30,9 +30,9 @@ exports.up = function(knex, Promise) {
     }),
     knex.schema.createTable('hours_of_operation', (table) => {
       table.increments('id').primary();
-      table.string('breakfast', 35);
-      table.string('lunch', 35);
-      table.string('dinner', 35);
+      table.string('breakfast', 150);
+      table.string('lunch', 150);
+      table.string('dinner', 150);
       table.dateTime('breakfast_start');
       table.dateTime('breakfast_end');
       table.dateTime('lunch_start');
