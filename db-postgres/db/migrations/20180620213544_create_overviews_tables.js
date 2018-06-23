@@ -3,36 +3,36 @@ exports.up = function(knex, Promise) {
   return Promise.all([
     knex.schema.createTable('overviews', (table) => {
       table.increments('id').primary();
-      table.string('rest_name', 35);
+      table.string('rest_name', 75);
       table.string('description', 850);
-      table.string('phone_number', 35);
+      table.string('phone_number', 75);
       table.string('website', 250);
-      table.string('executive_chef', 35);
-      table.string('parking_details', 350);
+      table.string('executive_chef', 75);
+      table.string('parking_details', 500);
     }),
     knex.schema.createTable('price_ranges', (table) => {
       table.increments('id').primary();
-      table.string('price_range', 35);
+      table.string('price_range', 100);
       table.integer('overviews_id')
         .references('id').inTable('overviews');
     }),
     knex.schema.createTable('dining_styles', (table) => {
       table.increments('id').primary();
-      table.string('dining_style', 35);
+      table.string('dining_style', 100);
       table.integer('overviews_id')
         .references('id').inTable('overviews');
     }),
     knex.schema.createTable('cuisine_types', (table) => {
       table.increments('id').primary();
-      table.string('cuisine_type', 35);
+      table.string('cuisine_type', 100);
       table.integer('overviews_id')
         .references('id').inTable('overviews');
     }),
     knex.schema.createTable('hours_of_operation', (table) => {
       table.increments('id').primary();
-      table.string('breakfast', 150);
-      table.string('lunch', 150);
-      table.string('dinner', 150);
+      table.string('breakfast', 250);
+      table.string('lunch', 250);
+      table.string('dinner', 250);
       table.dateTime('breakfast_start');
       table.dateTime('breakfast_end');
       table.dateTime('lunch_start');
@@ -44,23 +44,23 @@ exports.up = function(knex, Promise) {
     }),
     knex.schema.createTable('payment_options', (table) => {
       table.increments('id').primary();
-      table.string('card_type', 35);
+      table.string('card_type', 75);
       table.integer('overviews_id')
         .references('id').inTable('overviews');
     }),
     knex.schema.createTable('dress_codes', (table) => {
       table.increments('id').primary();
-      table.string('dress_code', 35);
+      table.string('dress_code', 100);
       table.integer('overviews_id')
         .references('id').inTable('overviews');
     }),
     knex.schema.createTable('locations', (table) => {
       table.increments('id').primary();
-      table.string('address', 250);
-      table.string('neighborhood', 250);
-      table.string('cross_street', 250);
-      table.string('parking_details', 250);
-      table.string('public_transit', 250);
+      table.string('address', 350);
+      table.string('neighborhood', 350);
+      table.string('cross_street', 350);
+      table.string('parking_details', 350);
+      table.string('public_transit', 350);
       table.float('lat', 6);
       table.float('lgn', 6);
       table.integer('overviews_id')
@@ -68,7 +68,7 @@ exports.up = function(knex, Promise) {
     }),
     knex.schema.createTable('tags', (table) => {
       table.increments('id').primary();
-      table.string('tag_name', 35);
+      table.string('tag_name', 75);
       table.integer('vote_count');
       table.integer('overviews_id')
         .references('id').inTable('overviews');
@@ -78,7 +78,6 @@ exports.up = function(knex, Promise) {
 
 exports.down = function(knex, Promise) {
   return Promise.all([
-    knex.schema.dropTableIfExists('overviews'),
     knex.schema.dropTableIfExists('price_ranges'),
     knex.schema.dropTableIfExists('dining_styles'),
     knex.schema.dropTableIfExists('cuisine_types'),
@@ -86,6 +85,7 @@ exports.down = function(knex, Promise) {
     knex.schema.dropTableIfExists('payment_options'),
     knex.schema.dropTableIfExists('dress_codes'),
     knex.schema.dropTableIfExists('locations'),
-    knex.schema.dropTableIfExists('tags')
+    knex.schema.dropTableIfExists('tags'),
+    knex.schema.dropTableIfExists('overviews')
   ]);
 };

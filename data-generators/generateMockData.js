@@ -1,4 +1,3 @@
-const faker = require('faker');
 const chance = require('chance').Chance();
 
 // const MAX_ROWS = 10000;
@@ -17,7 +16,7 @@ const chance = require('chance').Chance();
 //then batch insert...
 
 const MAX_ROWS = 100000;
-const BATCH_SIZE = 1000;
+const BATCH_SIZE = 10000;
 let overviewCount = 0;
 
 const createOverview = () => {
