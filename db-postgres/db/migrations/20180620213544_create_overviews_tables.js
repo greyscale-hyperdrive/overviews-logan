@@ -59,6 +59,7 @@ exports.up = function(knex, Promise) {
       table.string('address', 250);
       table.string('neighborhood', 250);
       table.string('cross_street', 250);
+      table.string('parking_details', 250);
       table.string('public_transit', 250);
       table.float('lat', 6);
       table.float('lgn', 6);

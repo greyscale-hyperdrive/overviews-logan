@@ -1,18 +1,24 @@
 const faker = require('faker');
 const chance = require('chance').Chance();
 
-const MAX_ROWS = 10000;
-const BATCH_SIZE = 10000;
-let overviewCount = 0;
-let priceRangeCount = 1;
-let diningStyleCount = 1;
-let cuisineTypeCount = 1;
-let hoursOfOperationCount = 1; //Still need to improve accuracy/utility...
-let paymentOptionsCount = 1;
-let dressCodeCount = 1;
+// const MAX_ROWS = 10000;
+// const BATCH_SIZE = 5000;
+// let overviewCount = 0;
+// let priceRangeCount = 1;
+// let diningStyleCount = 1;
+// let cuisineTypeCount = 1;
+// let hoursOfOperationCount = 1; //Still need to improve accuracy/utility...
+// let paymentOptionsCount = 1;
+// let dressCodeCount = 1;
+// let locationCount = 1;
+// let tagCount = 1;
 
 //will have to assign funcs to a variable synchronously in seed file,
 //then batch insert...
+
+const MAX_ROWS = 100000;
+const BATCH_SIZE = 1000;
+let overviewCount = 0;
 
 const createOverview = () => {
   const rest_name = chance.word({ syllables: chance.integer({ min: 1, max: 4 }) })
@@ -40,10 +46,18 @@ const genOverviews = () => {
     overviewCount += 1;
     rows.push(createOverview());
   }
-  console.log('Overviews')
-  console.log(rows);
   return rows;
 };
+
+// console.log(`flag start: ${overviewCount}`);
+// while (overviewCount <= MAX_ROWS) {
+//   genOverviews();
+//   if (overviewCount >= MAX_ROWS) {
+//     console.log(`overviewCount reaches max rows: ${genOverviews()}`);
+//   }
+// }
+// console.log(`flag end: ${overviewCount}`);
+
 
 const priceQuartiles = ['$30 and under', '$31 to $50', '$50 and over'];
 
@@ -204,8 +218,6 @@ const genHoursOfOperation = () => {
   return rows;
 };
 
-
-//ONE TO MANY... Payment Options
 const paymentOptionsList = ['AMEX', 'Carte Blanche', 'Diners Club', 'Discover', 'JCB', 'MasterCard', 'Visa'];
 
 const renderPaymentOption = (paymentOption, id, storageRows) => {
@@ -264,24 +276,52 @@ const genDressCodes = () => {
   return rows;
 };
 
+const randomNeighborhoods = ['Upper', 'Lower', 'Mid', 'Downtown', 'Uptown', 'Center', 'Outer', 'Inner', 'Coastal', 'Lakeside', 'Southern', 'Northern', 'Western', 'Eastern'];
 
-/*
-  knex.schema.createTable('locations', (table) => {
-    table.increments('id').primary();
-    table.string('address', 250);
-    table.string('neighborhood', 250);
-    table.string('cross_street', 250);
-    table.string('public_transit', 250);
-    table.float('lat', 6);
-    table.float('lgn', 6);
-    table.integer('overviews_id')
-      .references('id').inTable('overviews');
-  })
-*/
+const createAddress = (id) => {
+  const addressNum = chance.integer({ min: 1, max: 1000 });
+  const addressStreet = chance.street();
+  const addressShort = `${addressNum} ${addressStreet}`;
+  const name = `${chance.capitalize(chance.word())} ${chance.capitalize(chance.word())}`;
+  const city = chance.city();
+  const state = chance.state();
+  const zip = chance.zip();
 
+  const addressLong = `${addressShort} ${name}, ${city}, ${state} ${zip}`;
+  const neighborhood = `${randomNeighborhoods[chance.integer({ min: 0, max: 13 })]} ${chance.capitalize(chance.word())}`;
+  const crossStreet = `${addressStreet} between ${chance.street()} and ${chance.street()}`;
+  const parkingDetails = chance.sentence({ words: 8});
+  const publiceTransit = chance.sentence({ words: 4 })
+  const latitude = chance.latitude({ fixed: 7 });
+  const longitude = chance.longitude({ fixed: 7 });
 
+  return {
+    address: addressLong,
+    neighborhood: neighborhood,
+    cross_street: crossStreet,
+    parking_details: parkingDetails,
+    public_transit: publiceTransit,
+    lat: latitude,
+    lgn: longitude,
+    overviews_id: id
+  }
+}
 
-
+const genLocations = () => {
+  if (locationCount >= MAX_ROWS) {
+    return null;
+  }
+  const rows = [];
+  const start = locationCount;
+  const end = locationCount + BATCH_SIZE;
+  for (let i = start; i < end; i++) {
+    rows.push(createAddress(i));
+    locationCount += 1;
+  }
+  console.log('Locations')
+  console.log(rows);
+  return rows;
+};
 
 const tagsList = ["Banquet", "Bar Dining", "Bar/Lounge", "Beer", "Chef's Table",
   "Cocktails", "Corkage Fee", "Full Bar", "Happy Hour", "Non-Smoking", "Outdoor dining",
@@ -290,53 +330,57 @@ const tagsList = ["Banquet", "Bar Dining", "Bar/Lounge", "Beer", "Chef's Table",
   "Waterfront", "Scenic View", "Special Occasion", "Counter Seating", "Handcrafted Cocktails",
   "Fun", "BYO Wine", "Gluten-free Menu"];
 
+const renderTagRowForId = (tagOption, id, storage) => {
+  const willAdd = chance.integer({ min: 1, max: 10 }) >= 7;
+  const voteCount = chance.integer({ min: 1, max: 500 })
+  if (!willAdd) {
+    return;
+  }
+  storage.push({ tag_name: tagOption, vote_count: voteCount, overviews_id: id });
+}
 
+const selectTagsForOverview = (id, storage) => {
+  tagsList.forEach((tag) => {
+    renderTagRowForId(tag, id, storage);
+  });
+}
 
+const genOverviewTags = () => {
+  if (tagCount >= MAX_ROWS) {
+    return null;
+  }
+  const rows = [];
+  const start = tagCount;
+  const end = tagCount + BATCH_SIZE;
+  for (let i = start; i < end; i++) {
+    selectTagsForOverview(i, rows);
+    tagCount += 1;
+  }
+  console.log('Tag Selection')
+  console.log(rows);
+  return rows;
+};
 
+// genOverviews();
+// genPriceRanges();
+// genDiningStyles();
+// genCuisineTypes();
+// genHoursOfOperation();
+// genPaymentOptions();
+// genDressCodes();
+// genLocations();
+// genOverviewTags();
 
-
-// var formatFunc = function(str) {
-//   var arr = str.split(', ');
-//   var storage = {};
-//   arr.forEach((tag) => {
-//     if(!storage.hasOwnProperty(tag)) {
-//       storage[tag] = true;
-//     }
-//   });
-//   return Object.keys(storage);
-// }
-
-
-genOverviews();
-genPriceRanges();
-genPriceRanges();
-genDiningStyles();
-genCuisineTypes();
-genHoursOfOperation();
-genPaymentOptions();
-genDressCodes();
-
-
-
-
-
-
-
-
-
-
-
-
-// var test = 1;
-// var batchSize = 100;
-// var testFunc = function() {
-//   var start = test;
-//   var end = test + batchSize;
-//   for (let i = start; i < end; i++) {
-//         console.log('test', test);
-//         console.log('i', i);
-//     test += 1;
-//   }
-// }
+module.exports = {
+  genOverviews,
+  genPriceRanges,
+  genDiningStyles,
+  genCuisineTypes,
+  genHoursOfOperation,
+  genPaymentOptions,
+  genDressCodes,
+  genLocations,
+  genOverviewTags,
+}
 
 
