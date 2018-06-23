@@ -1,24 +1,5 @@
 const chance = require('chance').Chance();
 
-// const MAX_ROWS = 10000;
-// const BATCH_SIZE = 5000;
-// let overviewCount = 0;
-// let priceRangeCount = 1;
-// let diningStyleCount = 1;
-// let cuisineTypeCount = 1;
-// let hoursOfOperationCount = 1; //Still need to improve accuracy/utility...
-// let paymentOptionsCount = 1;
-// let dressCodeCount = 1;
-// let locationCount = 1;
-// let tagCount = 1;
-
-//will have to assign funcs to a variable synchronously in seed file,
-//then batch insert...
-
-const MAX_ROWS = 100000;
-const BATCH_SIZE = 10000;
-let overviewCount = 0;
-
 const createOverview = () => {
   const rest_name = chance.word({ syllables: chance.integer({ min: 1, max: 4 }) })
   const description = chance.paragraph();
@@ -36,28 +17,6 @@ const createOverview = () => {
   };
 };
 
-const genOverviews = () => {
-  if (overviewCount >= MAX_ROWS) {
-    return null;
-  }
-  const rows = [];
-  for (let i = 1; i <= BATCH_SIZE; i++) {
-    overviewCount += 1;
-    rows.push(createOverview());
-  }
-  return rows;
-};
-
-// console.log(`flag start: ${overviewCount}`);
-// while (overviewCount <= MAX_ROWS) {
-//   genOverviews();
-//   if (overviewCount >= MAX_ROWS) {
-//     console.log(`overviewCount reaches max rows: ${genOverviews()}`);
-//   }
-// }
-// console.log(`flag end: ${overviewCount}`);
-
-
 const priceQuartiles = ['$30 and under', '$31 to $50', '$50 and over'];
 
 const createPriceRange = (id) => {
@@ -68,22 +27,6 @@ const createPriceRange = (id) => {
   };
 };
 
-const genPriceRanges = () => {
-  if (priceRangeCount >= MAX_ROWS) {
-    return null;
-  }
-  const rows = [];
-  const start = priceRangeCount;
-  const end = priceRangeCount + BATCH_SIZE;
-  for (let i = start; i < end; i++) {
-    rows.push(createPriceRange(i));
-    priceRangeCount += 1;
-  }
-  console.log('Price Ranges')
-  console.log(rows);
-  return rows;
-};
-
 const diningStyleTags = ['Fine Dining', 'Home Style', 'Casual Dining', 'Casual Elegant'];
 
 const addDiningStyleTag = (id) => {
@@ -92,22 +35,6 @@ const addDiningStyleTag = (id) => {
     dining_style: dining_style,
     overviews_id: id
   };
-};
-
-const genDiningStyles = () => {
-  if (diningStyleCount >= MAX_ROWS) {
-    return null;
-  }
-  const rows = [];
-  const start = diningStyleCount;
-  const end = diningStyleCount + BATCH_SIZE;
-  for (let i = start; i < end; i++) {
-    rows.push(addDiningStyleTag(i));
-    diningStyleCount += 1;
-  }
-  console.log('Dining Styles')
-  console.log(rows);
-  return rows;
 };
 
 const cuisineTypeList = ['Italian', 'Mexican', 'Chinese', 'Indian', 'Japanese', 'Greek',
@@ -123,22 +50,6 @@ const addCuisineTag = (id) => {
     cuisine_types: cuisine_types,
     overviews_id: id
   };
-}
-
-const genCuisineTypes = () => {
-  if (cuisineTypeCount >= MAX_ROWS) {
-    return null;
-  }
-  const rows = [];
-  const start = cuisineTypeCount;
-  const end = cuisineTypeCount + BATCH_SIZE;
-  for (let i = start; i < end; i++) {
-    rows.push(addCuisineTag(i));
-    cuisineTypeCount += 1;
-  }
-  console.log('Cuisine Types')
-  console.log(rows);
-  return rows;
 };
 
 const renderTimeData = (start) => {
@@ -201,22 +112,6 @@ const createHoursOfOperation = (id) => {
   }
 }
 
-const genHoursOfOperation = () => {
-  if (hoursOfOperationCount >= MAX_ROWS) {
-    return null;
-  }
-  const rows = [];
-  const start = hoursOfOperationCount;
-  const end = hoursOfOperationCount + BATCH_SIZE;
-  for (let i = start; i < end; i++) {
-    rows.push(createHoursOfOperation(i));
-    hoursOfOperationCount += 1;
-  }
-  console.log('Hours of operation')
-  console.log(rows);
-  return rows;
-};
-
 const paymentOptionsList = ['AMEX', 'Carte Blanche', 'Diners Club', 'Discover', 'JCB', 'MasterCard', 'Visa'];
 
 const renderPaymentOption = (paymentOption, id, storageRows) => {
@@ -227,27 +122,11 @@ const renderPaymentOption = (paymentOption, id, storageRows) => {
   storageRows.push({ card_type: paymentOption, overviews_id: id });
 }
 
-const createPaymentOptions = (id, storageRows) => {
+const selectPaymentOptions = (id, storageRows) => {
   paymentOptionsList.forEach((payment) => {
     renderPaymentOption(payment, id, storageRows);
   });
-}
-
-const genPaymentOptions = () => {
-  if (paymentOptionsCount >= MAX_ROWS) {
-    return null;
-  }
-  const rows = [];
-  const start = paymentOptionsCount;
-  const end = paymentOptionsCount + BATCH_SIZE;
-  for (let i = start; i < end; i++) {
-    createPaymentOptions(i, rows);
-    paymentOptionsCount += 1;
-  }
-  console.log('Payment Options')
-  console.log(rows);
-  return rows;
-}
+};
 
 const dressCodeList = ['Casual Dress', 'Smart Casual', 'Business Casual'];
 
@@ -257,22 +136,6 @@ const addDressCodeTag = (id) => {
     dress_code: dressCode,
     overviews_id: id
   };
-}
-
-const genDressCodes = () => {
-  if (dressCodeCount >= MAX_ROWS) {
-    return null;
-  }
-  const rows = [];
-  const start = dressCodeCount;
-  const end = dressCodeCount + BATCH_SIZE;
-  for (let i = start; i < end; i++) {
-    rows.push(addDiningStyleTag(i));
-    dressCodeCount += 1;
-  }
-  console.log('Dress Codes')
-  console.log(rows);
-  return rows;
 };
 
 const randomNeighborhoods = ['Upper', 'Lower', 'Mid', 'Downtown', 'Uptown', 'Center', 'Outer', 'Inner', 'Coastal', 'Lakeside', 'Southern', 'Northern', 'Western', 'Eastern'];
@@ -304,7 +167,7 @@ const createAddress = (id) => {
     lgn: longitude,
     overviews_id: id
   }
-}
+};
 
 const genLocations = () => {
   if (locationCount >= MAX_ROWS) {
@@ -336,50 +199,24 @@ const renderTagRowForId = (tagOption, id, storage) => {
     return;
   }
   storage.push({ tag_name: tagOption, vote_count: voteCount, overviews_id: id });
-}
+};
 
 const selectTagsForOverview = (id, storage) => {
   tagsList.forEach((tag) => {
     renderTagRowForId(tag, id, storage);
   });
-}
-
-const genOverviewTags = () => {
-  if (tagCount >= MAX_ROWS) {
-    return null;
-  }
-  const rows = [];
-  const start = tagCount;
-  const end = tagCount + BATCH_SIZE;
-  for (let i = start; i < end; i++) {
-    selectTagsForOverview(i, rows);
-    tagCount += 1;
-  }
-  console.log('Tag Selection')
-  console.log(rows);
-  return rows;
 };
 
-// genOverviews();
-// genPriceRanges();
-// genDiningStyles();
-// genCuisineTypes();
-// genHoursOfOperation();
-// genPaymentOptions();
-// genDressCodes();
-// genLocations();
-// genOverviewTags();
-
 module.exports = {
-  genOverviews,
-  genPriceRanges,
-  genDiningStyles,
-  genCuisineTypes,
-  genHoursOfOperation,
-  genPaymentOptions,
-  genDressCodes,
-  genLocations,
-  genOverviewTags,
+  createOverview,
+  createPriceRange,
+  addDiningStyleTag,
+  addCuisineTag,
+  createHoursOfOperation,
+  selectPaymentOptions,
+  addDressCodeTag,
+  createAddress,
+  selectTagsForOverview,
 }
 
 
