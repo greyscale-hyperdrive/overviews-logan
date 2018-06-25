@@ -3,8 +3,8 @@ const fs = require('fs');
 const dataGen = require('../data-generators/generateMockData.js')
 const createCsvStringifier = require('csv-writer').createObjectCsvStringifier;
 
-const RECORDS = 100000;
-const ALERT_SETTING = 10000;
+const RECORDS = 10000000;
+const ALERT_SETTING = 1000000;
 
 const csvStringifyOverviews = createCsvStringifier({
   header: [

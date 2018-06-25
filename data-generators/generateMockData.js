@@ -85,7 +85,7 @@ const createHoursOfOperation = (id) => {
   const lunchStart = hasLunch ? chance.integer({ min: 11, max: 12}) : null;
   const lunchEnd = hasLunch ? chance.integer({ min: 15, max: 17}) : null;
   const dinnerStart = hasDinner ? chance.integer({ min: 16, max: 18}) : null;
-  const dinnerEnd = hasDinner ? chance.integer({ min: 21, max: 24}) : null;
+  const dinnerEnd = hasDinner ? chance.integer({ min: 21, max: 23}) : null;
 
   const breakfastStartFormat = renderTimeData(breakfastStart);
   const breakfastEndFormat = renderTimeData(breakfastEnd);
@@ -193,7 +193,7 @@ const tagsList = ["Banquet", "Bar Dining", "Bar/Lounge", "Beer", "Chef's Table",
   "Fun", "BYO Wine", "Gluten-free Menu"];
 
 const renderTagRowForId = (tagOption, id, storage) => {
-  const willAdd = chance.integer({ min: 1, max: 10 }) >= 7;
+  const willAdd = chance.integer({ min: 1, max: 10 }) >= 8;
   const voteCount = chance.integer({ min: 1, max: 500 })
   if (!willAdd) {
     return;

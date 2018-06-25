@@ -37,6 +37,7 @@
     "morgan": "^1.9.0",
     "mysql": "^2.15.0",
     "pg": "^7.4.3",
+    "pg-copy-streams": "^1.2.0",
     "popper.js": "^1.14.3",
     "prop-types": "^15.6.1",
     "react": "^16.4.0",

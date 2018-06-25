@@ -33,12 +33,12 @@ exports.up = function(knex, Promise) {
       table.string('breakfast', 250);
       table.string('lunch', 250);
       table.string('dinner', 250);
-      table.dateTime('breakfast_start');
-      table.dateTime('breakfast_end');
-      table.dateTime('lunch_start');
-      table.dateTime('lunch_end');
-      table.dateTime('dinner_start');
-      table.dateTime('dinner_end');
+      table.time('breakfast_start');
+      table.time('breakfast_end');
+      table.time('lunch_start');
+      table.time('lunch_end');
+      table.time('dinner_start');
+      table.time('dinner_end');
       table.integer('overviews_id')
         .references('id').inTable('overviews');
     }),
