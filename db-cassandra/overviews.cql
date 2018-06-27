@@ -1,40 +1,106 @@
 USE greyscale_overviews;
 
-CREATE TYPE IF NOT EXISTS address (
-  street text,
-  city text,
-  state text,
-  zip text,
-  neighborhood text,
-  cross_street text
-);
-
-CREATE TYPE IF NOT EXISTS location (
-  lat float,
-  lgn float
-);
-
-CREATE TYPE IF NOT EXISTS menu_hours (
-  description text,
-  start timestamp,
-  end timestamp
-);
-
-CREATE TABLE IF NOT EXISTS overview_by_id (
-  rest_id int PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS overview_by_name_state (
+  rest_id text,
   rest_name text,
-  price_range text,
+  state text,
+  address text,
+  breakfast text,
+  breakfast_end text,
+  breakfast_start text,
+  city text,
+  cross_street text,
+  cuisine text,
   description text,
   dining_style text,
-  cuisine text,
-  phone_number text,
-  website text,
-  payment_options set<text>,
+  dinner text,
+  dinner_end text,
+  dinner_start text,
   dress_code text,
-  location frozen<location>,
-  address frozen<address>,
+  executive_chef text,
+  lat text,
+  lgn text,
+  lunch text,
+  lunch_end text,
+  lunch_start text,
+  neighborhood text,
   parking_details text,
+  payment_options text,
+  phone_number text,
+  price_range text,
   public_transit text,
-  tags map<text, int>,
-  hours_of_operation map<text, frozen<menu_hours>>
+  tags text,
+  website text,
+  zip text,
+  PRIMARY KEY ((state), rest_name, rest_id)
+);
+
+CREATE TABLE IF NOT EXISTS overview_by_cuisine_price (
+  rest_id text,
+  rest_name text,
+  state text,
+  address text,
+  breakfast text,
+  breakfast_end text,
+  breakfast_start text,
+  city text,
+  cross_street text,
+  cuisine text,
+  description text,
+  dining_style text,
+  dinner text,
+  dinner_end text,
+  dinner_start text,
+  dress_code text,
+  executive_chef text,
+  lat text,
+  lgn text,
+  lunch text,
+  lunch_end text,
+  lunch_start text,
+  neighborhood text,
+  parking_details text,
+  payment_options text,
+  phone_number text,
+  price_range text,
+  public_transit text,
+  tags text,
+  website text,
+  zip text,
+  PRIMARY KEY ((cuisine), price_range, state, rest_id)
+);
+
+CREATE TABLE IF NOT EXISTS overview_by_state_city_zip (
+  rest_id text,
+  rest_name text,
+  state text,
+  address text,
+  breakfast text,
+  breakfast_end text,
+  breakfast_start text,
+  city text,
+  cross_street text,
+  cuisine text,
+  description text,
+  dining_style text,
+  dinner text,
+  dinner_end text,
+  dinner_start text,
+  dress_code text,
+  executive_chef text,
+  lat text,
+  lgn text,
+  lunch text,
+  lunch_end text,
+  lunch_start text,
+  neighborhood text,
+  parking_details text,
+  payment_options text,
+  phone_number text,
+  price_range text,
+  public_transit text,
+  tags text,
+  website text,
+  zip text,
+  PRIMARY KEY ((state), city, zip, rest_id)
 );

@@ -158,6 +158,9 @@ const createAddress = (id) => {
   const longitude = chance.longitude({ fixed: 7 });
 
   return {
+    state: state,
+    city: city,
+    zip: zip,
     address: addressLong,
     neighborhood: neighborhood,
     cross_street: crossStreet,
@@ -167,22 +170,6 @@ const createAddress = (id) => {
     lgn: longitude,
     overviews_id: id
   }
-};
-
-const genLocations = () => {
-  if (locationCount >= MAX_ROWS) {
-    return null;
-  }
-  const rows = [];
-  const start = locationCount;
-  const end = locationCount + BATCH_SIZE;
-  for (let i = start; i < end; i++) {
-    rows.push(createAddress(i));
-    locationCount += 1;
-  }
-  console.log('Locations')
-  console.log(rows);
-  return rows;
 };
 
 const tagsList = ["Banquet", "Bar Dining", "Bar/Lounge", "Beer", "Chef's Table",

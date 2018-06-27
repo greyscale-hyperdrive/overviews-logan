@@ -1,5 +1,16 @@
 const chance = require('chance').Chance();
 
+/*
+cqlsh> INSERT INTO cycling.cyclist_races (id, lastname, firstname, races) VALUES (
+  5b6962dd-3f90-4c93-8f61-eabfa4a803e2,
+  'VOS',
+  'Marianne',
+  [{ race_title : 'Rabobank 7-Dorpenomloop Aalburg',race_date : '2015-05-09',race_time : '02:58:33' },
+  { race_title : 'Ronde van Gelderland',race_date : '2015-04-19',race_time : '03:22:23' }]
+);
+
+*/
+
 const priceQuartiles = ['$30 and under', '$31 to $50', '$50 and over'];
 const diningStyleTags = ['Fine Dining', 'Home Style', 'Casual Dining', 'Casual Elegant'];
 const cuisineTypeList = ['Italian', 'Mexican', 'Chinese', 'Indian', 'Japanese', 'Greek',
@@ -8,37 +19,8 @@ const cuisineTypeList = ['Italian', 'Mexican', 'Chinese', 'Indian', 'Japanese', 
 'Seafood', 'Soul', 'Scottish', 'Belgian', 'Vegan', 'Portuguese', 'Southern American',
 'Tex-Mex', 'BBQ', 'Midwestern', 'Korean barbecue', 'Hawaiian', 'Hawaiian BBQ', 'Polish',
 'Brewery'];
-const cuisineTypeList = ['Italian', 'Mexican', 'Chinese', 'Indian', 'Japanese', 'Greek',
-'Spanish', 'Thai', 'French', 'Vietnamese', 'Cajun', 'South Korea', 'Lebanese', 'American',
-'Caribbean', 'Vegetarian', 'German', 'Mediterranean', 'Canadian', 'Russian', 'Moroccan',
-'Seafood', 'Soul', 'Scottish', 'Belgian', 'Vegan', 'Portuguese', 'Southern American',
-'Tex-Mex', 'BBQ', 'Midwestern', 'Korean barbecue', 'Hawaiian', 'Hawaiian BBQ', 'Polish',
-'Brewery'];
-
-const createOverview = (id) => {
-  const rest_name = chance.word({ syllables: chance.integer({ min: 1, max: 4 }) });
-  const price_range = priceQuartiles[chance.integer({ min: 0, max: 2 })];
-  const description = chance.paragraph();
-  const dining_style = diningStyleTags[chance.integer({ min: 0, max: 3 })];
-  const cuisine_types = cuisineTypeList[chance.integer({ min: 0, max: 35 })];
-  const phone_number = chance.phone();
-  const website = chance.domain({tld: 'com'});
-
-  const executive_chef = chance.name();
-  const parking_details = chance.paragraph({ sentences: chance.integer({ min: 1, max: 3})});
-  return {
-    rest_id: id,
-    rest_name: rest_name,
-    price_range: price_range,
-    description: description,
-    dining_style: dining_style,
-    cuisine: cuisine_types,
-    phone_number: phone_number,
-    website: website,
-    executive_chef: executive_chef,
-    parking_details: parking_details
-  };
-};
+const dressCodeList = ['Casual Dress', 'Smart Casual', 'Business Casual'];
+const randomNeighborhoods = ['Upper', 'Lower', 'Mid', 'Downtown', 'Uptown', 'Center', 'Outer', 'Inner', 'Coastal', 'Lakeside', 'Southern', 'Northern', 'Western', 'Eastern'];
 
 const renderTimeData = (start) => {
   if (start === null) {
@@ -60,7 +42,7 @@ const renderOperationDesc = (meal, start, end, daysOfWeek) => {
   return null;
 }
 
-const createHoursOfOperation = (id) => {
+const createHoursOfOperation = () => {
   const hasBreakfast = chance.integer({ min: 0, max: 1}) > 0;
   const hasLunch = chance.integer({ min: 0, max: 1}) > 0;
   const hasDinner = chance.integer({ min: 0, max: 1}) > 0;
@@ -96,113 +78,117 @@ const createHoursOfOperation = (id) => {
     lunch_end: lunchEndFormat,
     dinner_start: dinnerStartFormat,
     dinner_end: dinnerEndFormat,
-    overviews_id: id
   }
 }
 
 const paymentOptionsList = ['AMEX', 'Carte Blanche', 'Diners Club', 'Discover', 'JCB', 'MasterCard', 'Visa'];
 
-const renderPaymentOption = (paymentOption, id, storageRows) => {
+const renderPaymentOption = (paymentOption, storage) => {
   const willAdd = chance.integer({ min: 1, max: 10 }) >= 4;
   if (!willAdd) {
     return;
   }
-  storageRows.push({ card_type: paymentOption, overviews_id: id });
+  storage.push(paymentOption);
 }
 
-const selectPaymentOptions = (id, storageRows) => {
+const selectPaymentOptions = () => {
+  storage = [];
   paymentOptionsList.forEach((payment) => {
-    renderPaymentOption(payment, id, storageRows);
+    renderPaymentOption(payment, storage);
   });
+  return storage;
 };
 
-const dressCodeList = ['Casual Dress', 'Smart Casual', 'Business Casual'];
+const tagsList = ['Banquet', 'Bar Dining', 'Bar/Lounge', 'Beer', 'Chef\'s Table',
+  'Cocktails', 'Corkage Fee', 'Full Bar', 'Happy Hour', 'Non-Smoking', 'Outdoor dining',
+  'Private Room', 'View', 'Weekend Brunch', 'Wheelchair Access', 'Wine', 'Fit For Foodies',
+  'Good For A Date', 'Creative Cuisine', 'Casual', 'Kid-Friendly', 'Neighborhood Gem',
+  'Waterfront', 'Scenic View', 'Special Occasion', 'Counter Seating', 'Handcrafted Cocktails',
+  'Fun', 'BYO Wine', 'Gluten-free Menu'];
 
-const addDressCodeTag = (id) => {
-  const dressCode = dressCodeList[chance.integer({ min: 0, max: 2 })];
-  return {
-    dress_code: dressCode,
-    overviews_id: id
-  };
-};
-
-const randomNeighborhoods = ['Upper', 'Lower', 'Mid', 'Downtown', 'Uptown', 'Center', 'Outer', 'Inner', 'Coastal', 'Lakeside', 'Southern', 'Northern', 'Western', 'Eastern'];
-
-const createAddress = (id) => {
-  const addressNum = chance.integer({ min: 1, max: 1000 });
-  const addressStreet = chance.street();
-  const addressShort = `${addressNum} ${addressStreet}`;
-  const name = `${chance.capitalize(chance.word())} ${chance.capitalize(chance.word())}`;
-  const city = chance.city();
-  const state = chance.state();
-  const zip = chance.zip();
-
-  const addressLong = `${addressShort} ${name}, ${city}, ${state} ${zip}`;
-  const neighborhood = `${randomNeighborhoods[chance.integer({ min: 0, max: 13 })]} ${chance.capitalize(chance.word())}`;
-  const crossStreet = `${addressStreet} between ${chance.street()} and ${chance.street()}`;
-  const parkingDetails = chance.sentence({ words: 8});
-  const publiceTransit = chance.sentence({ words: 4 })
-  const latitude = chance.latitude({ fixed: 7 });
-  const longitude = chance.longitude({ fixed: 7 });
-
-  return {
-    address: addressLong,
-    neighborhood: neighborhood,
-    cross_street: crossStreet,
-    parking_details: parkingDetails,
-    public_transit: publiceTransit,
-    lat: latitude,
-    lgn: longitude,
-    overviews_id: id
-  }
-};
-
-const genLocations = () => {
-  if (locationCount >= MAX_ROWS) {
-    return null;
-  }
-  const rows = [];
-  const start = locationCount;
-  const end = locationCount + BATCH_SIZE;
-  for (let i = start; i < end; i++) {
-    rows.push(createAddress(i));
-    locationCount += 1;
-  }
-  console.log('Locations')
-  console.log(rows);
-  return rows;
-};
-
-const tagsList = ["Banquet", "Bar Dining", "Bar/Lounge", "Beer", "Chef's Table",
-  "Cocktails", "Corkage Fee", "Full Bar", "Happy Hour", "Non-Smoking", "Outdoor dining",
-  "Private Room", "View", "Weekend Brunch", "Wheelchair Access", "Wine", "Fit For Foodies",
-  "Good For A Date", "Creative Cuisine", "Casual", "Kid-Friendly", "Neighborhood Gem",
-  "Waterfront", "Scenic View", "Special Occasion", "Counter Seating", "Handcrafted Cocktails",
-  "Fun", "BYO Wine", "Gluten-free Menu"];
-
-const renderTagRowForId = (tagOption, id, storage) => {
+const renderTagRowForId = (tagOption, storage) => {
   const willAdd = chance.integer({ min: 1, max: 10 }) >= 8;
   const voteCount = chance.integer({ min: 1, max: 500 })
   if (!willAdd) {
     return;
   }
-  storage.push({ tag_name: tagOption, vote_count: voteCount, overviews_id: id });
+  storage.push([`${tagOption}:${voteCount}`]);
 };
 
-const selectTagsForOverview = (id, storage) => {
+const selectTagsForOverview = () => {
+  const storage = [];
   tagsList.forEach((tag) => {
-    renderTagRowForId(tag, id, storage);
+    renderTagRowForId(tag, storage);
   });
+  return storage;
+};
+
+
+const createOverview = (id) => {
+  const rest_name = chance.word({ syllables: chance.integer({ min: 1, max: 4 }) });
+  const price_range = priceQuartiles[chance.integer({ min: 0, max: 2 })];
+  const description = chance.paragraph();
+  const dining_style = diningStyleTags[chance.integer({ min: 0, max: 3 })];
+  const cuisine_types = cuisineTypeList[chance.integer({ min: 0, max: 35 })];
+  const phone_number = chance.phone();
+  const website = chance.domain({tld: 'com'});
+  const executive_chef = chance.name();
+  const dressCode = dressCodeList[chance.integer({ min: 0, max: 2 })];
+
+  const state = chance.state();
+  const city = chance.city();
+  const zip = chance.zip();
+
+  const addressNum = chance.integer({ min: 1, max: 1000 });
+  const addressStreet = chance.street();
+  const addressShort = `${addressNum} ${addressStreet}`;
+  const name = `${chance.capitalize(chance.word())} ${chance.capitalize(chance.word())}`;
+  const addressLong = `${addressShort} ${name}, ${city}, ${state} ${zip}`;
+  const neighborhood = `${randomNeighborhoods[chance.integer({ min: 0, max: 13 })]} ${chance.capitalize(chance.word())}`;
+  const crossStreet = `${addressStreet} between ${chance.street()} and ${chance.street()}`;
+  const parking_details = chance.paragraph({ sentences: chance.integer({ min: 1, max: 3})});
+  const publice_transit = chance.sentence({ words: 4 });
+  const latitude = chance.latitude({ fixed: 7 });
+  const longitude = chance.longitude({ fixed: 7 });
+  const operationHrs = createHoursOfOperation();
+  const payment_options = selectPaymentOptions();
+  const tags = selectTagsForOverview();
+
+  return {
+    rest_id: id,
+    rest_name: rest_name,
+    price_range: price_range,
+    description: description,
+    dining_style: dining_style,
+    cuisine: cuisine_types,
+    phone_number: phone_number,
+    website: website,
+    executive_chef: executive_chef,
+    dress_code: dressCode,
+    state: state,
+    city: city,
+    zip: zip,
+    address: addressLong,
+    neighborhood: neighborhood,
+    cross_street: crossStreet,
+    parking_details: parking_details,
+    public_transit: publice_transit,
+    lat: latitude,
+    lgn: longitude,
+    breakfast: operationHrs.breakfast,
+    lunch: operationHrs.lunch,
+    dinner: operationHrs.dinner,
+    breakfast_start: operationHrs.breakfast_start,
+    breakfast_end: operationHrs.breakfast_end,
+    lunch_start: operationHrs.lunch_start,
+    lunch_end: operationHrs.lunch_end,
+    dinner_start: operationHrs.dinner_start,
+    dinner_end: operationHrs.dinner_end,
+    payment_options: payment_options,
+    tags: tags
+  };
 };
 
 module.exports = {
   createOverview,
-  createPriceRange,
-  addDiningStyleTag,
-  addCuisineTag,
-  createHoursOfOperation,
-  selectPaymentOptions,
-  addDressCodeTag,
-  createAddress,
-  selectTagsForOverview,
 }
