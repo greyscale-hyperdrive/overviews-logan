@@ -36,15 +36,6 @@ router.put('/:restaurantId/overview', (req, res, next) => {
   });
 });
 
-//Update/Modify: 200(ok), 204(no content), 404(not found -> if id not found or invalid)
-//for entire collection 405(method not allowed) -> would update entire collection
-router.patch('/:restaurantId/overview', (req, res, next) => {
-  const restaurantId = req.params.restaurantId;
-  res.status(200).json({
-    message: `Updated overview ${restaurantId}`
-  });
-});
-
 //Delete: 200(ok), 404(not found)
 //for entire collection 405(method not allowed)
 router.delete('/:restaurantId/overview', (req, res, next) => {
