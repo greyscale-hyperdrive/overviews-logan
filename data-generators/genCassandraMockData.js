@@ -1,16 +1,5 @@
 const chance = require('chance').Chance();
 
-/*
-cqlsh> INSERT INTO cycling.cyclist_races (id, lastname, firstname, races) VALUES (
-  5b6962dd-3f90-4c93-8f61-eabfa4a803e2,
-  'VOS',
-  'Marianne',
-  [{ race_title : 'Rabobank 7-Dorpenomloop Aalburg',race_date : '2015-05-09',race_time : '02:58:33' },
-  { race_title : 'Ronde van Gelderland',race_date : '2015-04-19',race_time : '03:22:23' }]
-);
-
-*/
-
 const priceQuartiles = ['$30 and under', '$31 to $50', '$50 and over'];
 const diningStyleTags = ['Fine Dining', 'Home Style', 'Casual Dining', 'Casual Elegant'];
 const cuisineTypeList = ['Italian', 'Mexican', 'Chinese', 'Indian', 'Japanese', 'Greek',
