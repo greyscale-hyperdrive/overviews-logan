@@ -1,6 +1,6 @@
 USE greyscale_overviews;
 
-CREATE TABLE IF NOT EXISTS overview_by_name_state (
+CREATE TABLE IF NOT EXISTS overview_by_id (
   rest_id text,
   rest_name text,
   state text,
@@ -32,11 +32,11 @@ CREATE TABLE IF NOT EXISTS overview_by_name_state (
   tags text,
   website text,
   zip text,
-  PRIMARY KEY ((state), rest_name, rest_id)
+  PRIMARY KEY (rest_id)
 );
 
-CREATE TABLE IF NOT EXISTS overview_by_cuisine_price (
-  rest_id text,
+CREATE TABLE IF NOT EXISTS overview_by_state_id (
+  rest_id int,
   rest_name text,
   state text,
   address text,
@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS overview_by_cuisine_price (
   tags text,
   website text,
   zip text,
-  PRIMARY KEY ((cuisine), price_range, state, rest_id)
+  PRIMARY KEY ((state), rest_id)
 );
 
 CREATE TABLE IF NOT EXISTS overview_by_state_city_zip (

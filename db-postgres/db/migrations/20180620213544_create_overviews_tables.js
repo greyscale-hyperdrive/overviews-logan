@@ -115,18 +115,16 @@ exports.up = function(knex, Promise) {
   ]);
 };
 
-    // knex.schema.dropTableIfExists('price_ranges'),
-    // knex.schema.dropTableIfExists('dining_styles'),
-    // knex.schema.dropTableIfExists('cuisine_types'),
-    // knex.schema.dropTableIfExists('hours_of_operation'),
-    // knex.schema.dropTableIfExists('payment_options'),
-    // knex.schema.dropTableIfExists('dress_codes'),
-
-    // knex.schema.dropTableIfExists('tags'),
-    // knex.schema.dropTableIfExists('overviews')
-
 exports.down = function(knex, Promise) {
   return Promise.all([
+    knex.schema.dropTableIfExists('price_ranges'),
+    knex.schema.dropTableIfExists('dining_styles'),
+    knex.schema.dropTableIfExists('cuisine_types'),
+    knex.schema.dropTableIfExists('hours_of_operation'),
+    knex.schema.dropTableIfExists('payment_options'),
+    knex.schema.dropTableIfExists('dress_codes'),
     knex.schema.dropTableIfExists('locations'),
+    knex.schema.dropTableIfExists('tags'),
+    knex.schema.dropTableIfExists('overviews')
   ]);
 };

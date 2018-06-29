@@ -31,3 +31,5 @@ config/
 
 #DB files
 csv/
+psqlQueries.md
+projectNotes.md
