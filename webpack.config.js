@@ -38,7 +38,7 @@ module.exports = {
     ]
   },
   output: {
-    filename: 'bundle.js',
+    filename: 'overviewsBundle.js',
     path: dist_dir,
   },
 };

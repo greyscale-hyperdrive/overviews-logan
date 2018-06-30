@@ -3,7 +3,7 @@ const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const path = require('path');
-const db = require('../database/index');
+//http://localhost:3003/overviews/restaurant/1000000/overview
 
 const restaurantRoutes = require('./api/routes/restaurant');
 

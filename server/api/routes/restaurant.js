@@ -1,21 +1,17 @@
 const express = require('express');
-const db = require('../../../database/index');
+const db = require('../../../db-cassandra/index.js');
 
 const router = express.Router();
 
-
 //Get Read: 200(ok), 404(not found)
 router.get('/:restaurantId/overview', (req, res, next) => {
-  const restaurantId = req.params.restaurantId;
-  db.retrieve(restaurantId, (err, results) => {
-    if (err && err.message.includes('Cast to number failed for value "NaN"')) {
-      res.status(400).json('Bad request');
-    } else if (err) {
+  db.selectByID(req, res)
+    .then((result) => {
+      res.status(200).json(result.rows);
+    })
+    .catch((err) => {
       res.status(500).json('Unable to retrieve overview data from database');
-    } else {
-      res.status(200).json(results);
-    }
-  });
+    })
 });
 
 //POST Create: 201(created), 404 (not found), 409 (conflict)
