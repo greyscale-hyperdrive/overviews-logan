@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server/index.js",
     "start-dev": "nodemon server/index.js",
-    "cassandra-schema": "cqlsh -f ./db-cassandra/overviews.cql",
+    "cassandra-schema": "cqlsh -f ./db-cassandra/overviews2.cql",
     "gen-mock-pg": "node ./db-postgres/writeToCSV.js",
     "build": "webpack -d --watch",
     "test": "jest"

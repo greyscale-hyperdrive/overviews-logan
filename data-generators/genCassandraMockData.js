@@ -229,8 +229,6 @@ const createOverview = (id) => {
   };
 };
 
-console.log(createOverview(1));
-
 module.exports = {
   createOverview,
 }

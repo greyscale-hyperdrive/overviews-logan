@@ -32,3 +32,6 @@ config/
 #DB files
 csv/
 project-notes/
+
+#Testing files
+artillery-logs/
