@@ -19,14 +19,12 @@ router.post('/:restaurantId/overview', (req, res, next) => {
   db.insertIntoDB(req, res)
     .then((result) => {
       console.log(result.rows);
-      res.status(201).json(result.rows);
+      res.status(201).json(result);
     })
     .catch((error) => {
       console.log(error.message || error);
     });
 });
-
-
 
 //PUT Update/Replace: 200(ok), 204(no content), 404(not found -> if id not found or invalid)
 //for entire collection 405(method not allowed) -> would update entire collection

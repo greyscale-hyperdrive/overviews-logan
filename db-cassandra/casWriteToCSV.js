@@ -82,7 +82,7 @@ const createCSV = (streamWriter, entries, csvStringifier, worker) => {
 }
 
 // createCSV(overviewStreamIDStateFoodPrice, RECORDS, formatIDStateFoodPriceForCSV, 'Overviews Stream: ID State Food Price');
-createCSV(overviewStreamID, RECORDS, formatIDForCSV, 'Overviews Stream: ID');
+// createCSV(overviewStreamID, RECORDS, formatIDForCSV, 'Overviews Stream: ID');
 
 // createCSV(overviewsStreamStateCityZip, RECORDS, formatStateCityZipForCSV, 'Overviews Stream: State City Zip');
 // createCSV(overviewStreamStateID, RECORDS, formatStateIDForCSV, 'Overviews Stream: State ID');

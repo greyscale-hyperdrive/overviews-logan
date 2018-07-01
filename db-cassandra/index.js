@@ -70,17 +70,17 @@ const checkUpdateRequestBody = (req) => {
 
 const checkPostRequestBody = (req) => {
   //should be sent as an array of valus for each row
-  const reqRowData = req.body.data.column.insertRow;
+  const postReqData = req.body.data.column.insertRow;
   if (!req.body.data) {
     throw new Error('no content: 204');
     return;
   }
   //will throw error req row data is not an array, or contains less column data than column keys
-  if (!Array.isArray(reqRowData) || validColKeys.length !== reqRowData.length) {
+  if (!Array.isArray(postReqData) || validColKeys.length !== postReqData.length) {
     throw new Error('bad request: 400');
     return;
   }
-  return reqRowData;
+  return postReqData;
 };
 
 //`COPY greyscale_overviews2.overview_by_id (rest_id, address, breakfast, breakfast_end, breakfast_start, city, cross_street, cuisine, description, dining_style, dinner, dinner_end, dinner_start, dress_code, executive_chef, lat, lgn, lunch, lunch_end, lunch_start, neighborhood, parking_details, payment_options, phone_number, price_range, public_transit, rest_name, tags, state, website, zip) FROM './csv/cass/overviewStreamID.csv' WITH DELIMITER='|'`
@@ -138,8 +138,8 @@ const queryInsertRow = 'INSERT INTO overview_by_id (rest_id, address, breakfast,
 const insertIntoDB = async (req, res, next) => {
   try {
     const rest_id = checkParams(req);
-    const reqRows = checkPostRequestBody(req);
-    const rows = await client.execute(queryInsertRow, [reqRows, rest_id], { prepare: true });
+    const postReqData = checkPostRequestBody(req);
+    const rows = await client.execute(queryInsertRow, postReqData, { prepare: true });
     console.log(rows);
     return rows;
   } catch(err) {
@@ -151,6 +151,7 @@ const insertIntoDB = async (req, res, next) => {
       res.sendStatus(400);
       return err;
     }
+    return err;
   }
 };
 
