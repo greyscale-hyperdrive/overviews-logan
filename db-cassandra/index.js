@@ -94,7 +94,6 @@ const selectByID = async (req, res, next) => {
   try {
     const rest_id = checkParams(req);
     const rows = await client.execute(querySelectRestID, [rest_id], { prepare: true });
-    console.log(rows);
     return rows;
   } catch(err) {
     if (err.message === 'bad request: 400') {
@@ -123,7 +122,7 @@ const updateByID = async (req, res, next) => {
       return err;
     } else {
       res.sendStatus(500);
-      console.log('ERROR from updateByID:', err);
+      // console.log('ERROR from updateByID:', err);
       return err;
     }
   }
@@ -140,7 +139,7 @@ const insertIntoDB = async (req, res, next) => {
     const rest_id = checkParams(req);
     const postReqData = checkPostRequestBody(req);
     const rows = await client.execute(queryInsertRow, postReqData, { prepare: true });
-    console.log(rows);
+    // console.log(rows);
     return rows;
   } catch(err) {
     //409 (conflict) if id already exists
@@ -154,8 +153,6 @@ const insertIntoDB = async (req, res, next) => {
     return err;
   }
 };
-
-
 
 module.exports = {
   selectByID,
