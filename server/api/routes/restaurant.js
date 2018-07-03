@@ -13,9 +13,7 @@ router.get('/:restaurantId/overview', (req, res, next) => {
       res.status(200).json(result.rows);
     })
     .catch((error) => {
-      res.status(500).json({
-        error
-      });
+      res.sendStatus(404);
     });
 });
 
@@ -38,9 +36,18 @@ router.post('/:restaurantId/overview', (req, res, next) => {
         });
         return;
       }
+      if (error.message === 'bad request: 400') {
+        res.sendStatus(400);
+        return;
+      }
+      if (error.message === 'no content: 204') {
+        res.sendStatus(204);
+        return;
+      }
       res.status(500).json({
         error
       });
+      return;
     });
 });
 
@@ -48,6 +55,9 @@ router.put('/:restaurantId/overview', (req, res, next) => {
   db.updateByID(req, res)
     .then((result) => {
       const rest_id = req.params.restaurantId;
+      if (result === 'bad request: 400') {
+        throw new Error('conflict: 400');
+      }
       if (result.rows[0]['[applied]'] === false) {
         res.status(200).json({
           message: `overview ${rest_id} does not exist`,
@@ -62,6 +72,10 @@ router.put('/:restaurantId/overview', (req, res, next) => {
       res.sendStatus(204);
     })
     .catch((error) => {
+      if (error.message === 'bad request: 400') {
+        res.sendStatus(400);
+        return;
+      }
       res.status(500).json({
         error
       });
@@ -72,6 +86,9 @@ router.delete('/:restaurantId/overview', (req, res, next) => {
   db.deleteRowDB(req, res)
     .then((result) => {
       const rest_id = req.params.restaurantId;
+      if (result === 'bad request: 400') {
+        throw new Error('conflict: 400');
+      }
       if (result.rows[0]['[applied]'] === false) {
         res.status(200).json({
           message: `overview ${rest_id} does not exist`,
@@ -86,6 +103,10 @@ router.delete('/:restaurantId/overview', (req, res, next) => {
       res.sendStatus(204);
     })
     .catch((error) => {
+      if (error.message === 'bad request: 400') {
+        res.sendStatus(400);
+        return;
+      }
       res.status(500).json({
         error
       });
