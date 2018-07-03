@@ -1,8 +1,11 @@
-const nr = require('newrelic');
+// const nr = require('newrelic');
 const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const path = require('path');
+const config = require('../config/index');
+// let port = process.env.port || (process.argv[2] || 3003);
+// port = (typeof port === 'number') ? port : 3003;
 //http://localhost:3003/overviews/restaurant/1000000/overview
 
 const restaurantRoutes = require('./api/routes/restaurant');

@@ -1,5 +1,5 @@
 const cassandra = require('cassandra-driver');
-const client = new cassandra.Client({contactPoints: ['127.0.0.1'], keyspace: 'greyscale_overviews2'});
+const client = require('../config/cassConnection');
 
 //for testing connection
 // client.connect()
@@ -93,16 +93,14 @@ const querySelectRestID = 'SELECT rest_id, address, breakfast, breakfast_end, br
 const selectByID = async (req, res, next) => {
   try {
     const rest_id = checkParams(req);
-    const rows = await client.execute(querySelectRestID, [rest_id], { prepare: true });
-    return rows;
+    const resultSet = await client.execute(querySelectRestID, [rest_id], { prepare: true });
+    return resultSet;
   } catch(err) {
     if (err.message === 'bad request: 400') {
       res.sendStatus(400);
       return err;
-    } else {
-      res.sendStatus(404);
-      return err;
     }
+    return err;
   }
 };
 
@@ -111,8 +109,8 @@ const updateByID = async (req, res, next) => {
     const rest_id = checkParams(req);
     const queryUpdateRestID = `UPDATE overview_by_id SET ${req.body.data.column.colName} = ? WHERE rest_id = ? IF EXISTS`;
     checkUpdateRequestBody(req, res, next);
-    const rows = await client.execute(queryUpdateRestID, [req.body.data.column.colNew, rest_id], { prepare: true });
-    return rows;
+    const resultSet = await client.execute(queryUpdateRestID, [req.body.data.column.colNew, rest_id], { prepare: true });
+    return resultSet;
   } catch(err) {
     if (err.message === 'bad request: 400') {
       res.sendStatus(400);
@@ -120,11 +118,8 @@ const updateByID = async (req, res, next) => {
     } else if (err.message === 'no content: 204') {
       res.sendStatus(204);
       return err;
-    } else {
-      res.sendStatus(500);
-      // console.log('ERROR from updateByID:', err);
-      return err;
     }
+    return err;
   }
 };
 
@@ -137,12 +132,12 @@ const queryInsertRow = 'INSERT INTO overview_by_id (rest_id, address, breakfast,
 const insertIntoDB = async (req, res, next) => {
   try {
     const rest_id = checkParams(req);
+    console.log('Found: insertIntoDB');
+    console.log(req);
     const postReqData = checkPostRequestBody(req);
-    const rows = await client.execute(queryInsertRow, postReqData, { prepare: true });
-    // console.log(rows);
-    return rows;
+    const resultSet = await client.execute(queryInsertRow, postReqData, { prepare: true });
+    return resultSet;
   } catch(err) {
-    //409 (conflict) if id already exists
     if (err.message === 'no content: 204') {
       res.sendStatus(204);
       return err;
@@ -154,8 +149,61 @@ const insertIntoDB = async (req, res, next) => {
   }
 };
 
+const deleteRowDB = async (req, res, next) => {
+  try {
+    const rest_id = checkParams(req);
+    const queryDeleteRow = `DELETE FROM greyscale_overviews2.overview_by_id WHERE rest_id = ? IF EXISTS`;
+    const resultSet = await client.execute(queryDeleteRow, [rest_id], { prepare: true });
+    return resultSet;
+  } catch(err) {
+    return err;
+  }
+};
+
+const testInsertIntoDB = async (client, id, reqBody) => {
+  try {
+    const req = {
+      params: {
+        restaurantId: id
+      }
+    }
+    const rest_id = checkParams(req);
+    const postReqData = checkPostRequestBody(reqBody);
+    const resultSet = await client.execute(queryInsertRow, postReqData, { prepare: true });
+    return resultSet;
+  } catch(err) {
+    if (err.message === 'no content: 204') {
+      res.sendStatus(204);
+      return err;
+    } else if (err.message === 'bad request: 400') {
+      res.sendStatus(400);
+      return err;
+    }
+    return err;
+  }
+}
+
+const testDeleteRowDB = async (client, id) => {
+  try {
+    const req = {
+      params: {
+        restaurantId: id
+      }
+    }
+    const rest_id = checkParams(req);
+    const queryDeleteRow = `DELETE FROM greyscale_overviews2.overview_by_id WHERE rest_id = ? IF EXISTS`;
+    const resultSet = await client.execute(queryDeleteRow, [rest_id], { prepare: true });
+    return resultSet;
+  } catch(err) {
+    return err;
+  }
+}
+
 module.exports = {
   selectByID,
   updateByID,
   insertIntoDB,
+  deleteRowDB,
+  testInsertIntoDB,
+  testDeleteRowDB,
 }
