@@ -1,14 +1,14 @@
 const express = require('express');
 const db = require('../../../db-cassandra/index');
+const cache = require('../../../redis-cache/redisCache');
 
 const router = express.Router();
 
 router.get('/:restaurantId/overview', (req, res, next) => {
-  db.selectByID(req, res)
+  db.selectByID(cache, req, res, next)
     .then((result) => {
-      if (result.rows.length < 1) {
-        res.sendStatus(404);
-        return;
+      if (result.rows[0].length < 1) {
+        throw new Error('not found: 404');
       }
       res.status(200).json(result.rows);
     })

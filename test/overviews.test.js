@@ -4,6 +4,7 @@ const express = require('express');
 const request = require("supertest");
 const app = require('../server/application');
 const cassConfig = require('../config/cassTestingConfig');
+const redis = require('../config/redisConfig');
 const client = new cassandra.Client({
   contactPoints: cassConfig.contactPoints,
   keyspace: cassConfig.keyspace
@@ -184,12 +185,18 @@ const putRestNameV2 = {
   }
 };
 
+// let redisClient;
 beforeAll(() => {
+  // redisClient = redis.createClient(cassConfig.redisPort, cassConfig.redisHost);
   return client.connect();
 });
 afterAll(() => {
+  redis.closeInstance();
   return client.shutdown();
 });
+// afterEach(() => {
+//   return redis.closeInstance();
+// })
 
 describe('## Create a new overview in cassandra with POST', () => {
   test('Test: POST request with valid ID #13,000,000 creates the overview in cassandra', async () => {

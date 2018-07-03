@@ -112,58 +112,6 @@ const selectTagsForOverview = () => {
   return storage;
 };
 
-
-const AL = ['Birmingham', 'Montgomery', 'Mobile', 'Huntsville'];
-const AK = ['Anchorage'];
-const AZ = ['Phoenix', 'Tucson', 'Mesa', 'Chandler'];
-const AR = ['Little Rock', 'Fort Smith', 'Fayetteville', 'Springdale '];
-const CA = ['Los Angeles', 'San Diego', 'San Jose', 'San Francisco'];
-const CO = [];
-const CT = [];
-const DE = [];
-const FL = [];
-const GA = [];
-const HI = [];
-const ID = [];
-const IL = [];
-const IN = [];
-const IA = [];
-const KS = [];
-const KY = [];
-const LA = [];
-const ME = [];
-const MD = [];
-const MA = [];
-const MI = [];
-const MN = [];
-const MS = [];
-const MO = [];
-const MT = [];
-const NE = [];
-const NV = [];
-const NH = [];
-const NJ = [];
-const NM = [];
-const NY = [];
-const NC = [];
-const ND = [];
-const OH = [];
-const OK = [];
-const OR = [];
-const PA = [];
-const RI = [];
-const SC = [];
-const SD = [];
-const TN = [];
-const TX = [];
-const UT = [];
-const VT = [];
-const VA = [];
-const WA = [];
-const WV = [];
-const WI = [];
-const WY = [];
-
 const createOverview = (id) => {
   const rest_name = chance.word({ syllables: chance.integer({ min: 1, max: 4 }) });
   const price_range = priceQuartiles[chance.integer({ min: 0, max: 2 })];

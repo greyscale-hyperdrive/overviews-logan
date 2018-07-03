@@ -4,9 +4,7 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const path = require('path');
 const config = require('../config/index');
-// let port = process.env.port || (process.argv[2] || 3003);
-// port = (typeof port === 'number') ? port : 3003;
-//http://localhost:3003/overviews/restaurant/1000000/overview
+const redisRoute = require('../redis-cache/redisCache');
 
 const restaurantRoutes = require('./api/routes/restaurant');
 
@@ -29,7 +27,6 @@ app.use((req, res, next) => {
 app.use('/restaurant/:restaurantId', express.static(path.join(__dirname, '../public/index.html')));
 app.use('/overviewsBundle.js', express.static(path.join(__dirname, '../public/dist/bundle.js')));
 app.use('/images/star-rating.png', express.static(path.join(__dirname, '../public/images/star-rating.png')));
-
 app.use('/overviews/restaurant/', restaurantRoutes);
 
 app.use((req, res, next) => {
