@@ -78,7 +78,7 @@ const querySelectRestID = 'SELECT rest_id, address, breakfast, breakfast_end, br
   'lunch_end, lunch_start, neighborhood, parking_details, payment_options, phone_number, price_range, ' +
   'public_transit, rest_name, tags, state, website, zip FROM overview_by_id WHERE rest_id = ?';
 
-const selectByID = async (redis, req, res, next) => {
+const selectByID = async (req, res, next) => {
   try {
     const rest_id = checkParams(req);
     if (rest_id === 'not found: 404') {

@@ -4,7 +4,7 @@ const express = require('express');
 const request = require("supertest");
 const app = require('../server/application');
 const cassConfig = require('../config/cassTestingConfig');
-const redis = require('../config/redisConfig');
+const redis = require('../redis-cache/redisCache');
 const client = new cassandra.Client({
   contactPoints: cassConfig.contactPoints,
   keyspace: cassConfig.keyspace

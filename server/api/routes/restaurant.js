@@ -5,16 +5,24 @@ const cache = require('../../../redis-cache/redisCache');
 const router = express.Router();
 
 router.get('/:restaurantId/overview', (req, res, next) => {
-  db.selectByID(cache, req, res, next)
-    .then((result) => {
-      if (result.rows[0].length < 1) {
-        throw new Error('not found: 404');
-      }
-      res.status(200).json(result.rows);
-    })
-    .catch((error) => {
-      res.sendStatus(404);
-    });
+  return cache.client.get(req.params.restaurantId, (err, data) => {
+    if (data) {
+      const resultJSON = JSON.parse(data);
+      return res.status(200).json(resultJSON.rows);
+    } else {
+      db.selectByID(req, res, next)
+        .then((result) => {
+          if (result.rows[0].length < 1) {
+            throw new Error('not found: 404');
+          }
+          cache.client.set(req.params.restaurantId, JSON.stringify(result));
+          return res.status(200).json(result.rows);
+        })
+        .catch((error) => {
+          res.sendStatus(404);
+        });
+    }
+  });
 });
 
 router.post('/:restaurantId/overview', (req, res, next) => {
