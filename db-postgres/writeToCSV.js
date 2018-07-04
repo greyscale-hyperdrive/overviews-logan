@@ -4,7 +4,7 @@ const dataGen = require('../data-generators/generateMockData.js')
 const createCsvStringifier = require('csv-writer').createObjectCsvStringifier;
 
 const RECORDS = 10000000;
-const ALERT_SETTING = 1000000;
+const ALERT_SETTING = 100000;
 
 const csvStringifyOverviews = createCsvStringifier({
   header: [
@@ -56,6 +56,9 @@ const csvStringifyDressCodeTag = createCsvStringifier({
 });
 const csvStringifyAddress = createCsvStringifier({
   header: [
+    { id: 'state' },
+    { id: 'city' },
+    { id: 'zip' },
     { id: 'address' },
     { id: 'neighborhood' },
     { id: 'cross_street' },
@@ -80,15 +83,19 @@ const csvStringifyTagsForOverview = createCsvStringifier({
   ]
 });
 
-const overviewsStream = fs.createWriteStream('../csv/overviews.csv');
-const priceRangeStream = fs.createWriteStream('../csv/priceRanges.csv');
-const diningStyleTagStream = fs.createWriteStream('../csv/diningStyleTags.csv');
-const cuisineTypeTagStream = fs.createWriteStream('../csv/cuisineTypeTags.csv');
-const hoursOfOperationStream = fs.createWriteStream('../csv/hoursOfOperation.csv');
-const dressCodeTagStream = fs.createWriteStream('../csv/dressCodeTags.csv');
-const addressStream = fs.createWriteStream('../csv/addresses.csv');
-const paymentOptionStream = fs.createWriteStream('../csv/paymentOptions.csv');
-const tagsForOverviewStream = fs.createWriteStream('../csv/tagsForOverview.csv');
+  // table.string('state', 75);
+  // table.string('city', 150);
+  // table.integer('zip');
+
+const overviewsStream = fs.createWriteStream('../csv/pg/overviews.csv');
+const priceRangeStream = fs.createWriteStream('../csv/pg/priceRanges.csv');
+const diningStyleTagStream = fs.createWriteStream('../csv/pg/diningStyleTags.csv');
+const cuisineTypeTagStream = fs.createWriteStream('../csv/pg/cuisineTypeTags.csv');
+const hoursOfOperationStream = fs.createWriteStream('../csv/pg/hoursOfOperation.csv');
+const dressCodeTagStream = fs.createWriteStream('../csv/pg/dressCodeTags.csv');
+const addressStream = fs.createWriteStream('../csv/pg/addresses.csv');
+const paymentOptionStream = fs.createWriteStream('../csv/pg/paymentOptions.csv');
+const tagsForOverviewStream = fs.createWriteStream('../csv/pg/tagsForOverview.csv');
 
 const logProgress = (id, worker) => {
   if (id % ALERT_SETTING === 0) {
@@ -139,13 +146,13 @@ const createCSVForOneToMany = (streamWriter, entries, setStringifier, genFunc, w
   write();
 }
 
-createCSV(overviewsStream, RECORDS, csvStringifyOverviews, dataGen.createOverview, 'Overviews Stream');
-createCSV(priceRangeStream, RECORDS, csvStringifyPriceRange, dataGen.createPriceRange, 'Price Range Stream');
-createCSV(diningStyleTagStream, RECORDS, csvStringifyDiningStyleTag, dataGen.addDiningStyleTag, 'Dining Style Tag Stream');
-createCSV(cuisineTypeTagStream, RECORDS, csvStringifyCuisineTypeTag, dataGen.addCuisineTag, 'Cuisine Type Tag Stream');
-createCSV(hoursOfOperationStream, RECORDS, csvStringifyHoursOfOperation, dataGen.createHoursOfOperation, 'Hours of Operation Stream');
-createCSV(dressCodeTagStream, RECORDS, csvStringifyDressCodeTag, dataGen.addDressCodeTag, 'Dress Code Tag Stream');
+// createCSV(overviewsStream, RECORDS, csvStringifyOverviews, dataGen.createOverview, 'Overviews Stream');
+// createCSV(priceRangeStream, RECORDS, csvStringifyPriceRange, dataGen.createPriceRange, 'Price Range Stream');
+// createCSV(diningStyleTagStream, RECORDS, csvStringifyDiningStyleTag, dataGen.addDiningStyleTag, 'Dining Style Tag Stream');
+// createCSV(cuisineTypeTagStream, RECORDS, csvStringifyCuisineTypeTag, dataGen.addCuisineTag, 'Cuisine Type Tag Stream');
+// createCSV(hoursOfOperationStream, RECORDS, csvStringifyHoursOfOperation, dataGen.createHoursOfOperation, 'Hours of Operation Stream');
+// createCSV(dressCodeTagStream, RECORDS, csvStringifyDressCodeTag, dataGen.addDressCodeTag, 'Dress Code Tag Stream');
 createCSV(addressStream, RECORDS, csvStringifyAddress, dataGen.createAddress, 'Address Stream');
-createCSVForOneToMany(paymentOptionStream, RECORDS, csvStringifyPaymentOption, dataGen.selectPaymentOptions, 'Payment Options Stream');
-createCSVForOneToMany(tagsForOverviewStream, RECORDS, csvStringifyTagsForOverview, dataGen.selectTagsForOverview, 'Tags for Overviews Stream');
+// createCSVForOneToMany(paymentOptionStream, RECORDS, csvStringifyPaymentOption, dataGen.selectPaymentOptions, 'Payment Options Stream');
+// createCSVForOneToMany(tagsForOverviewStream, RECORDS, csvStringifyTagsForOverview, dataGen.selectTagsForOverview, 'Tags for Overviews Stream');
 

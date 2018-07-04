@@ -1,39 +1,42 @@
 const express = require('express');
-const db = require('../../../database/index');
+const db = require('../../../db-cassandra/index.js');
 
 const router = express.Router();
 
-
 //Get Read: 200(ok), 404(not found)
 router.get('/:restaurantId/overview', (req, res, next) => {
-  const restaurantId = req.params.restaurantId;
-  db.retrieve(restaurantId, (err, results) => {
-    if (err && err.message.includes('Cast to number failed for value "NaN"')) {
-      res.status(400).json('Bad request');
-    } else if (err) {
-      res.status(500).json('Unable to retrieve overview data from database');
-    } else {
-      res.status(200).json(results);
-    }
-  });
+  db.selectByID(req, res)
+    .then((result) => {
+      res.status(200).json(result.rows);
+    })
+    .catch((error) => {
+      console.log(error.message || error);
+    });
 });
 
 //POST Create: 201(created), 404 (not found), 409 (conflict)
 router.post('/:restaurantId/overview', (req, res, next) => {
-  const restaurantId = req.params.restaurantId;
-  res.status(201).json({
-    message: `Posted overview ${restaurantId}`,
-    data: req.body,
-  });
+  db.insertIntoDB(req, res)
+    .then((result) => {
+      console.log(result.rows);
+      res.status(201).json(result);
+    })
+    .catch((error) => {
+      console.log(error.message || error);
+    });
 });
 
 //PUT Update/Replace: 200(ok), 204(no content), 404(not found -> if id not found or invalid)
 //for entire collection 405(method not allowed) -> would update entire collection
 router.put('/:restaurantId/overview', (req, res, next) => {
-  const restaurantId = req.params.restaurantId;
-  res.status(200).json({
-    message: `Pathed overview ${restaurantId}`
-  });
+  //result.response.rows['[applied]'] === true testing...
+  db.updateByID(req, res)
+    .then((result) => {
+      res.status(200).json({ response: result });
+    })
+    .catch((error) => {
+      console.log(error.message || error)
+    })
 });
 
 //Delete: 200(ok), 404(not found)
